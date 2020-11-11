@@ -3,7 +3,7 @@ from finite_automaton import FiniteAutomaton
 
 class UI:
     def __init__(self):
-        self.__fa = FiniteAutomaton()
+        self.__fa = FiniteAutomaton("fa.in")
 
     @staticmethod
     def print_menu():
@@ -13,6 +13,8 @@ class UI:
         print("     Print alphabet - 2")
         print("     Print transitions - 3")
         print("     Print final states - 4")
+        print("     Is deterministic - 5")
+        print("     Check word - 6")
 
     def run(self):
         while True:
@@ -31,6 +33,11 @@ class UI:
             elif option == 4:
                 for i in self.__fa.F:
                     print(i)
+            elif option == 5:
+                print(self.__fa.is_deterministic())
+            elif option == 6:
+                word = input("Enter word: ")
+                print(self.__fa.is_accepted(word))
             else:
                 print("Incorrect option")
 

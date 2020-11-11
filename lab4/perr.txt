@@ -1,0 +1,5 @@
+real sum: real 1nr; real 2nr.
+#
+s = "assre.
+-1,2
+return 1nr + 2nr.

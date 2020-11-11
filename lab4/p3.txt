@@ -1,0 +1,15 @@
+bool search: int x; array values.
+bool search: int x; array values.
+[
+int i.
+i = 0.
+while i < len (values) do
+[
+if values {i} = x then
+[
+return true.
+]
+i := i + 1.
+].
+return false.
+].

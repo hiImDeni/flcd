@@ -9,7 +9,18 @@ class Transitions:
             self.__content[start] = [(end, value)]
 
     def get_transitions(self, start):
+        if start not in self.__content.keys():
+            return []
         return self.__content[start]
+
+    def get_transitions_to(self, start, value):
+        transitions = []
+        if start not in self.__content.keys():
+            return []
+        for transition in self.__content[start]:
+            if transition[1] == value:
+                transitions.append(transition)
+        return transitions
 
     def get_keys(self):
         return self.__content.keys()
