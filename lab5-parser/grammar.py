@@ -26,15 +26,17 @@ class Grammar:
             self.start = self.non_terminals[0]
             line = file.readline().strip()
             while line:
-                line = line.split(' ')
+                line = line.split('-')
                 if line[0] not in self.non_terminals:
                     raise ValueError("Non-terminal does not exist")
                 self.productions[line[0]] = []
-                for i in range(1, len(line)):
-                    for char in line[i]:
-                        if char not in self.terminals and char not in self.non_terminals:
-                            raise ValueError("Symbol " + line[i] + " is not defined")
-                    self.productions[line[0]].append(line[i])
+                symbols = line[1].strip().split('|')
+                for symbol in symbols:
+                    s = symbol.split(' ')
+                    for i in range(0, len(s)):
+                        if s[i] not in self.terminals and s[i] not in self.non_terminals:
+                            raise ValueError("Symbol " + s[i] + " is not defined")
+                    self.productions[line[0]].append(s)
                 line = file.readline().strip()
 
     def get_non_terminals_string(self):
@@ -54,7 +56,9 @@ class Grammar:
         for i in self.productions:
             res += i + ' -> '
             for symbol in self.productions[i]:
-                res += symbol + ' | '
+                for s in symbol:
+                    res += s + ' '
+                res += ' | '
             res = res[:-2]
             res += '\n'
         return res

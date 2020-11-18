@@ -1,4 +1,4 @@
-S A
+S Aa
 a b e
-S e aA
-A aA bA a b
+S-e|a Aa
+Aa-a Aa|b Aa a|a|b
