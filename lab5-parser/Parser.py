@@ -14,8 +14,7 @@ class Parser:
         while True:
             aux = copy.deepcopy(c)
 
-            i = 0
-            for i in range (len(c.keys())):
+            for i in range(len(c.keys())):
                 keys = list(c.keys())
                 for j in keys[i]:
                     if j in self.grammar.non_terminals:
@@ -40,7 +39,7 @@ class Parser:
                             values[i] = values[i+1]
                             values[i+1] = aux
 
-                            return self.closure((el, self.grammar.productions[el]))
+                            return self.closure((el, state[el]))
         return []
 
     def ColCan(self):
@@ -51,6 +50,7 @@ class Parser:
         for nt in self.grammar.productions:
             for production in self.grammar.productions[nt]:
                 production.insert(0, '.')
+
         s0 = self.closure((start, self.grammar.productions[start]))
         print(s0)
 
@@ -61,12 +61,13 @@ class Parser:
 
             for state in c:
                 for symbol in self.grammar.non_terminals + self.grammar.terminals:
-                    gotoResult = self.goto(state, symbol)
-                    print(symbol)
-                    print(gotoResult)
-                    print()
-                    if gotoResult is not [] and gotoResult not in c:
-                        c.append(gotoResult)
+                    if symbol != "S'":
+                        gotoResult = self.goto(state, symbol)
+                        print(symbol)
+                        print(gotoResult)
+                        print()
+                        if gotoResult is not [] and gotoResult not in c:
+                            c.append(gotoResult)
 
             if aux == c:
                 break
@@ -74,6 +75,7 @@ class Parser:
 
     def parse(self):
         c = self.ColCan()
+
 
 grammar = Grammar()
 parser = Parser(grammar)
