@@ -1,5 +1,5 @@
-S' S Aa
-a b 0
+S' S A
+a b c
 S'-S
-S-0|a Aa
-Aa-a Aa|b Aa a|a|b
+S-a A
+A-b A|c

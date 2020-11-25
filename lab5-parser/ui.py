@@ -1,9 +1,11 @@
+from Parser import Parser
 from grammar import Grammar
 
 
 class UI:
     def __init__(self):
         self.__grammar = Grammar()
+        self.__parser = Parser()
 
     @staticmethod
     def print_menu():
