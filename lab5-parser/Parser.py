@@ -34,10 +34,8 @@ class Parser:
             if aux == c:
                 return c
 
-    def goto(self, state, symbol, productions):
+    def goto(self, state, symbol):
         for el in state:
-            # rhp = copy.deepcopy(state[el])
-
             for values in state[el]:
                 for i in range(len(values) - 1):
                     if values[i] == '.' and values[i + 1] == symbol:
@@ -49,7 +47,7 @@ class Parser:
                         if values[-1] != '.':
                             return self.closure((el, values))
                         else:
-                            return {el: values}
+                            return {el: [values]}
         return []
 
     def ColCan(self):
@@ -73,11 +71,7 @@ class Parser:
             for state in states:
                 for symbol in self.grammar.non_terminals + self.grammar.terminals:
                     if symbol != self.grammar.start:
-                        gotoResult = self.goto(state, symbol, productionsCopy)
-                        if gotoResult:
-                            print(symbol)
-                            print(gotoResult)
-                            print()
+                        gotoResult = self.goto(state, symbol)
                         if gotoResult != [] and gotoResult not in statesCopy:
                             states.append(gotoResult)
                             statesCopy.append(copy.deepcopy(gotoResult))
@@ -89,13 +83,60 @@ class Parser:
         c = self.ColCan()
 
     def action(self, state):
-        pass
+        keys = list(state.keys())
+
+        if len(keys) == 1:
+            if keys[0] == 'Z':
+                if len(state['Z']) == 1:
+                    if state['Z'][0][-1] == '.':
+                        return "acc"
+
+            first_key = state[keys[0]]
+            if len(first_key) == 1:
+                if first_key[0][-1] == '.':
+                    prod_index = -1
+                    for prod in self.grammar.productions:
+                        for el in self.grammar.productions[prod]:
+                            prod_index += 1
+
+                            if prod == keys[0]:
+                                if el == first_key[0][:-1]:
+                                    return "reduce", prod_index
+
+        return "shift"
+
+    def buildTable(self, states):
+        table = []
+
+        for s in range(len(states)):
+            action = self.action(states[s])
+            goto = {}
+
+            for symbol in self.grammar.non_terminals + self.grammar.terminals:
+                gotoResult = self.goto(states[s], symbol)
+
+                # gotoResultCopy = copy.deepcopy(gotoResult)
+                # for el in gotoResultCopy:
+                #    gotoResultCopy[el].sort()
+
+                # statesCopy = copy.deepcopy(states)
+                # for s in statesCopy:
+                #    for el in s:
+                #        s[el].sort()
+
+                if gotoResultCopy in statesCopy:
+                    goto[symbol] = states.index(gotoResult)
+
+            table.append((s, action, goto))
+
+        return table
 
     def parse(self, word):
         states = self.ColCan()
-
         print(states)
-        print(self.grammar.productions)
+
+        table = self.buildTable(states)
+        print(table)
 
         beta = list(word)
         index = 0
