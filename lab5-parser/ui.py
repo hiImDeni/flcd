@@ -5,7 +5,7 @@ from grammar import Grammar
 class UI:
     def __init__(self):
         self.__grammar = Grammar()
-        self.__parser = Parser()
+        self.__parser = Parser(self.__grammar)
 
     @staticmethod
     def print_menu():

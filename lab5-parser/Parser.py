@@ -7,30 +7,21 @@ class Parser:
     def __init__(self, grammar):
         self.grammar = grammar
 
-    def closure(self, element, productions):
+    def closure(self, element):
         # element is a tuple of the form (start, productions[start])
 
-        c = {element[0]: element[1]}
+        productions = copy.deepcopy(self.grammar.productions)
+
+        c = {element[0]: [element[1]]}
+
         while True:
             aux = copy.deepcopy(c)
 
-            for i in range(len(c.keys())):
-                keys = list(c.keys())
-                for j in keys[i]:
-                    if j in self.grammar.non_terminals:
-                        for k in productions[j]:
-                            if len(k) == 1 and k[0] == '0':
-                                pass
-                            if j not in c.keys():
-                                c[j] = []
-                            if k not in c[j]:
-                                c[j].append(k)
+            idx = element[1].index('.')
 
-            for el in element[1]:
-                index = el.index('.')
-
+            for el in c[element[0]]:
                 for symbol in el:
-                    if el.index(symbol) > index:
+                    if el.index(symbol) > idx:
                         if symbol in self.grammar.non_terminals:
                             for k in productions[symbol]:
                                 if len(k) == 1 and k[0] == '0':
@@ -38,24 +29,27 @@ class Parser:
                                 if symbol not in c.keys():
                                     c[symbol] = []
                                 if k not in c[symbol]:
+                                    k.insert(0, '.')
                                     c[symbol].append(k)
             if aux == c:
                 return c
 
     def goto(self, state, symbol, productions):
         for el in state:
-            rhp = copy.deepcopy(state[el])
+            # rhp = copy.deepcopy(state[el])
 
-            for values in rhp:
-                for i in range(len(values)):
-                    if i != len(values) - 1:
-                        if values[i] == '.' and values[i + 1] == symbol:
+            for values in state[el]:
+                for i in range(len(values) - 1):
+                    if values[i] == '.' and values[i + 1] == symbol:
 
-                            aux = values[i]
-                            values[i] = values[i + 1]
-                            values[i + 1] = aux
+                        aux = values[i]
+                        values[i] = values[i + 1]
+                        values[i + 1] = aux
 
-                            return self.closure((el, rhp), productions)
+                        if values[-1] != '.':
+                            return self.closure((el, values))
+                        else:
+                            return {el: values}
         return []
 
     def ColCan(self):
@@ -63,34 +57,33 @@ class Parser:
         productionsCopy = copy.deepcopy(self.grammar.productions)
 
         states = []
+        statesCopy = []
 
         for nt in productionsCopy:
             for production in productionsCopy[nt]:
                 production.insert(0, '.')
 
-        s0 = self.closure((start, productionsCopy[start]), productionsCopy)
+        s0 = self.closure((start, productionsCopy[start][0]))
 
         states.append(s0)
-        print(states)
+        statesCopy.append(copy.deepcopy(s0))
 
         while True:
-            aux = states
-            nr = 0
+            aux = statesCopy
             for state in states:
-                stateCopy = copy.deepcopy(state)
                 for symbol in self.grammar.non_terminals + self.grammar.terminals:
                     if symbol != self.grammar.start:
                         gotoResult = self.goto(state, symbol, productionsCopy)
                         if gotoResult:
-                            print(symbol + " " + str(nr))
+                            print(symbol)
                             print(gotoResult)
                             print()
-                        if gotoResult is not [] and gotoResult not in states:
+                        if gotoResult != [] and gotoResult not in statesCopy:
                             states.append(gotoResult)
-                nr += 1
+                            statesCopy.append(copy.deepcopy(gotoResult))
 
-            if aux == states:
-                return states
+            if aux == statesCopy:
+                return statesCopy
 
     def construct_table(self):
         c = self.ColCan()
