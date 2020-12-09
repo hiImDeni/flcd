@@ -1,6 +1,8 @@
+import collections
 import copy
 
 from grammar import Grammar
+
 
 
 class Parser:
@@ -107,26 +109,16 @@ class Parser:
 
     def buildTable(self, states):
         table = []
-
-        for s in range(len(states)):
+        statesCopy = copy.deepcopy(states)
+        for s in range(len(statesCopy)):
             action = self.action(states[s])
             goto = {}
 
             for symbol in self.grammar.non_terminals + self.grammar.terminals:
-                gotoResult = self.goto(states[s], symbol)
+                gotoResult = self.goto(statesCopy[s], symbol)
 
-                # gotoResultCopy = copy.deepcopy(gotoResult)
-                # for el in gotoResultCopy:
-                #    gotoResultCopy[el].sort()
-
-                # statesCopy = copy.deepcopy(states)
-                # for s in statesCopy:
-                #    for el in s:
-                #        s[el].sort()
-
-                if gotoResultCopy in statesCopy:
+                if gotoResult in states:
                     goto[symbol] = states.index(gotoResult)
-
             table.append((s, action, goto))
 
         return table
@@ -139,31 +131,50 @@ class Parser:
         print(table)
 
         beta = list(word)
-        index = 0
-        alpha = [index]
+
         phi = []
         end = False
 
-        # while not end:
-        #    state = states[index]
-        #    if self.action(state) == 'shift':
-        #        a = beta.pop(0)
-        #        state = self.goto(state, a)
-        #        alpha.append(a)
-        #        alpha.append(index)
-        #    elif self.action(state) == 'accept':
-        #       print('success')
-        #        end = True
-        #    elif self.action(state) == 'error':
-        #       print('error')
-        #        end = True
-        # elif len(self.action(state)) == 2 and self.action(state)[0] == 'reduce':
-        #    l = self.action(state)[1]
-        #    self.search_production(l)
-        #    state = self.goto()
-        #    alpha.pop()
-        #   alpha.pop()
-        #    phi.append(l)
+        statesCopy = copy.deepcopy(states)
+        state = statesCopy[0]
+        index = 0
+        alpha = [index]
+
+        while not end:
+            action = self.action(statesCopy[index])
+            if  action == 'shift':
+                symbol = beta.pop(0)
+                state = self.goto(statesCopy[index], symbol)
+                # if new_state in states:
+                index = states.index(state)
+                alpha.append(symbol)
+                alpha.append(index)
+            elif action == 'acc':
+                print('Success')
+                end = True
+            else:
+                production = []
+                key = ''
+                production_index = action[1]
+                i = 0
+                while i < production_index:
+                    for symbol in self.grammar.productions:
+                        for prod in self.grammar.productions[symbol]:
+                            i += 1
+                            if i == production_index:
+                                production = copy.deepcopy(prod)
+                                key = symbol
+                for _ in range(len(production)):
+                    alpha.pop()
+                    alpha.pop()
+                alpha.append(key)
+
+                state = self.goto(statesCopy[index], key)
+                for j in range(len(alpha)-1, 0, -1):
+                    if alpha[j] is int:
+                        index = alpha[j]
+                        break
+                alpha.append(states.index(state))
 
     def search_production(self, l):
         pass
@@ -172,4 +183,4 @@ class Parser:
 grammar = Grammar()
 parser = Parser(grammar)
 # word = input("Enter a word: ")
-parser.parse("a")
+parser.parse("abbc")
