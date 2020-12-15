@@ -135,28 +135,43 @@ class Parser:
         phi = []
         end = False
 
-        statesCopy = copy.deepcopy(states)
-        state = statesCopy[0]
+        state = copy.deepcopy(states[0])
+
         index = 0
         alpha = [index]
 
+        output = []
+
         while not end:
+            statesCopy = copy.deepcopy(states)
+
             action = self.action(statesCopy[index])
-            if  action == 'shift':
+            if action == 'shift':
+                print(action)
+
+                if not beta:
+                    print("\nError. Sequence not accepted.")
+                    return
+
                 symbol = beta.pop(0)
                 state = self.goto(statesCopy[index], symbol)
                 # if new_state in states:
                 index = states.index(state)
                 alpha.append(symbol)
                 alpha.append(index)
+                print(alpha)
             elif action == 'acc':
                 print('Success')
                 end = True
             else:
+                print(action)
                 production = []
                 key = ''
+
                 production_index = action[1]
-                i = 0
+                output.insert(0, production_index)
+
+                i = -1
                 while i < production_index:
                     for symbol in self.grammar.productions:
                         for prod in self.grammar.productions[symbol]:
@@ -169,18 +184,22 @@ class Parser:
                     alpha.pop()
                 alpha.append(key)
 
-                state = self.goto(statesCopy[index], key)
-                for j in range(len(alpha)-1, 0, -1):
-                    if alpha[j] is int:
+                for j in range(len(alpha) - 1, -1, -1):
+                    if isinstance(alpha[j], int):
                         index = alpha[j]
                         break
-                alpha.append(states.index(state))
 
-    def search_production(self, l):
-        pass
+                state = self.goto(statesCopy[index], key)
+
+                index = states.index(state)
+
+                alpha.append(index)
+                print(alpha)
+
+        print("\nOutput: ", output)
 
 
 grammar = Grammar()
 parser = Parser(grammar)
-# word = input("Enter a word: ")
-parser.parse("abbc")
+word = input("Enter a word: ")
+parser.parse(word)
