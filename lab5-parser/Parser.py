@@ -155,11 +155,15 @@ class Parser:
 
                 symbol = beta.pop(0)
                 state = self.goto(statesCopy[index], symbol)
-                # if new_state in states:
+                if state not in states:
+                    print("\nError. Sequence not accepted.")
+                    return
+
                 index = states.index(state)
                 alpha.append(symbol)
                 alpha.append(index)
                 print(alpha)
+
             elif action == 'acc':
                 print('Success')
                 end = True
