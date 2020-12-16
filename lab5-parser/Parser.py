@@ -80,9 +80,6 @@ class Parser:
             if aux == statesCopy:
                 return statesCopy
 
-    def construct_table(self):
-        c = self.ColCan()
-
     def action(self, state):
         keys = list(state.keys())
 
@@ -156,8 +153,13 @@ class Parser:
                 symbol = beta.pop(0)
 
                 # state = self.goto(statesCopy[index], symbol)
-                stateIndex = table[index][2][symbol]
-                state = states[stateIndex]
+                if symbol in table[index][2]:
+                    stateIndex = table[index][2][symbol]
+                    state = states[stateIndex]
+                else:
+                    print("\nError. Sequence not accepted.")
+                    return
+
                 if state not in states:
                     print("\nError. Sequence not accepted.")
                     return
@@ -197,8 +199,13 @@ class Parser:
                         break
 
                 # state = self.goto(statesCopy[index], key)
-                stateIndex = table[index][2][key]
-                state = states[stateIndex]
+
+                if key in table[index][2]:
+                    stateIndex = table[index][2][key]
+                    state = states[stateIndex]
+                else:
+                    print("\nError. Sequence not accepted.")
+                    return
 
                 index = states.index(state)
 
