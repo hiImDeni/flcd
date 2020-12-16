@@ -4,7 +4,6 @@ import copy
 from grammar import Grammar
 
 
-
 class Parser:
     def __init__(self, grammar):
         self.grammar = grammar
@@ -125,17 +124,20 @@ class Parser:
 
     def parse(self, word):
         states = self.ColCan()
-        print(states)
+        print("STATES")
+        for i in states:
+            print(i)
 
         table = self.buildTable(states)
-        print(table)
+        print("\nTABLE")
+        for i in table:
+            print(i)
+        print("\n")
 
         beta = list(word)
 
         phi = []
         end = False
-
-        state = copy.deepcopy(states[0])
 
         index = 0
         alpha = [index]
@@ -143,9 +145,7 @@ class Parser:
         output = []
 
         while not end:
-            statesCopy = copy.deepcopy(states)
-
-            action = self.action(statesCopy[index])
+            action = self.action(states[index])
             if action == 'shift':
                 print(action)
 
@@ -154,7 +154,10 @@ class Parser:
                     return
 
                 symbol = beta.pop(0)
-                state = self.goto(statesCopy[index], symbol)
+
+                # state = self.goto(statesCopy[index], symbol)
+                stateIndex = table[index][2][symbol]
+                state = states[stateIndex]
                 if state not in states:
                     print("\nError. Sequence not accepted.")
                     return
@@ -193,7 +196,9 @@ class Parser:
                         index = alpha[j]
                         break
 
-                state = self.goto(statesCopy[index], key)
+                # state = self.goto(statesCopy[index], key)
+                stateIndex = table[index][2][key]
+                state = states[stateIndex]
 
                 index = states.index(state)
 
