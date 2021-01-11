@@ -1,0 +1,56 @@
+%{
+#include <stdio.h>
+#include <string.h>
+%}
+
+%option noyywrap
+%option caseless
+
+LETTER		[A-Za-z_]
+DIGIT		[0-9]
+IDENTIFIER	{LITERA}({LITERA}|{CIFRA_ZEC})*
+NUMBER		({+} | {-})*{DIGIT}+
+REAL		{NUMBER}"."{NUMBER}
+SEPARATOR	[;.,:{}[] ]
+OPERATORS	[+ - / % := < > = ! & |"
+STRING		["][^\n"]*["]
+CHAR		"'"[^\n]"'"
+
+%%
+
+int {return INT;}
+bool {return BOOL;}
+real {return DOUBLE;}
+char {return CHAR;}
+string {return STRING;}
+none {return NONE;}
+array {return ARRAY;}
+if {return IF;}
+else {return ELSE;}
+while {return WHILE;}
+return {return RETURN;}
+
+{IDENTIFIER} {printf("%s - identifier\n", yytext);}
+
+;   {return SEMI_COLON;} 
+\.  {return DOT;} 
+"," {return COMMA;} 
+\:  {printf("%s - separator\n", yytext);} 
+\{  {return OPEN_CURLY_BRACKET;} 
+\}  {return CLOSED_CURLY_BRACKET;} 
+\[  {return OPEN_SQUARE_BRACKET;} 
+\]  {return CLOSED_SQUARE_BRACKET;} 
+
+\+  {return PLUS;}
+\-  {return MINUS;}
+\*  {return MUL;}
+\/  {return DIV;}
+\%  {return PERCENT;}
+\<  {return LT;}
+\>  {return GT;}
+\:= {return ATRIB;}
+"=" {return EQ;}
+\!  {return NOT;}
+\&  {return AND;}
+\|  {return OR;}
+
