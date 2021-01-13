@@ -1,6 +1,8 @@
 %{
 #include <stdio.h>
 #include <string.h>
+#include "yacc_specification.tab.c"
+int yylex();
 %}
 
 %option noyywrap
@@ -8,8 +10,8 @@
 
 LETTER		[A-Za-z_]
 DIGIT		[0-9]
-IDENTIFIER	{LITERA}({LITERA}|{CIFRA_ZEC})*
-NUMBER		({+} | {-})*{DIGIT}+
+IDENTIFIER	{LETTER}({LETTER}|{DIGIT})*
+INT			({+} | {-})*{DIGIT}+
 REAL		{NUMBER}"."{NUMBER}
 SEPARATOR	[;.,:{}[] ]
 OPERATORS	[+ - / % := < > = ! & |"
@@ -20,14 +22,15 @@ CHAR		"'"[^\n]"'"
 
 int {return INT;}
 bool {return BOOL;}
-real {return DOUBLE;}
+real {return REAL;}
 char {return CHAR;}
 string {return STRING;}
 none {return NONE;}
-array {return ARRAY;}
 if {return IF;}
+then { return THEN; }
 else {return ELSE;}
 while {return WHILE;}
+do { return DO; }
 return {return RETURN;}
 
 {IDENTIFIER} {printf("%s - identifier\n", yytext);}

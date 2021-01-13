@@ -1,0 +1,1031 @@
+Terminals unused in grammar
+
+   AND
+   OR
+   READ
+   WRITE
+   INT
+   NONE
+   STRING
+   CHAR
+   BOOL
+   REAL
+   RETURN
+   CONSTANT
+   SEMI_COLON
+   COMMA
+   DOT
+   OPEN_CURLY_BRACKET
+   CLOSED_CURLY_BRACKET
+   OPEN_SQUARE_BRACKET
+   CLOSED_SQUARE_BRACKET
+   OPEN_ROUND_BRACKET
+   CLOSED_ROUND_BRACKET
+   PLUS
+   MINUS
+   MUL
+   DIV
+   PERCENT
+   LT
+   GT
+   ATRIB
+   EQ
+   NOT_EQ
+
+
+State 61 conflicts: 3 shift/reduce
+State 62 conflicts: 3 shift/reduce
+
+
+Grammar
+
+    0 $accept: structured_stmt $end
+
+    1 structured_stmt: '[' compound_stmt ']'
+
+    2 compound_stmt: stmt
+    3              | compound_stmt '.' stmt
+
+    4 stmt: assign_stmt
+    5     | if_stmt
+    6     | while_stmt
+    7     | expr '.'
+
+    8 expr: expr '+' expr
+    9     | expr '-' expr
+   10     | expr '*' expr
+   11     | expr '/' expr
+   12     | expr '%' expr
+   13     | expr '&' expr
+   14     | expr '|' expr
+   15     | '!'
+   16     | '(' expr ')'
+   17     | '[' expr ']'
+   18     | '{' expr '}'
+
+   19 assign_stmt: IDENTIFIER ':' expr
+   20            | IDENTIFIER ':' IDENTIFIER '.'
+
+   21 if_stmt: IF condition THEN structured_stmt
+   22        | IF condition THEN structured_stmt ELSE structured_stmt
+
+   23 while_stmt: WHILE condition DO structured_stmt
+
+   24 condition: expr relational_operator expr conditional_operator condition
+   25          | NOT expr relational_operator expr conditional_operator condition
+   26          | expr relational_operator expr
+   27          | NOT expr relational_operator expr
+
+   28 relational_operator: '<'
+   29                    | '>'
+   30                    | '='
+
+   31 conditional_operator: '&'
+   32                     | '|'
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'!' (33) 15
+'%' (37) 12
+'&' (38) 13 31
+'(' (40) 16
+')' (41) 16
+'*' (42) 10
+'+' (43) 8
+'-' (45) 9
+'.' (46) 3 7 20
+'/' (47) 11
+':' (58) 19 20
+'<' (60) 28
+'=' (61) 30
+'>' (62) 29
+'[' (91) 1 17
+']' (93) 1 17
+'{' (123) 18
+'|' (124) 14 32
+'}' (125) 18
+error (256)
+AND (258)
+OR (259)
+NOT (260) 25 27
+IF (261) 21 22
+THEN (262) 21 22
+ELSE (263) 22
+WHILE (264) 23
+DO (265) 23
+READ (266)
+WRITE (267)
+INT (268)
+NONE (269)
+STRING (270)
+CHAR (271)
+BOOL (272)
+REAL (273)
+RETURN (274)
+IDENTIFIER (275) 19 20
+CONSTANT (276)
+SEMI_COLON (277)
+COMMA (278)
+DOT (279)
+OPEN_CURLY_BRACKET (280)
+CLOSED_CURLY_BRACKET (281)
+OPEN_SQUARE_BRACKET (282)
+CLOSED_SQUARE_BRACKET (283)
+OPEN_ROUND_BRACKET (284)
+CLOSED_ROUND_BRACKET (285)
+PLUS (286)
+MINUS (287)
+MUL (288)
+DIV (289)
+PERCENT (290)
+LT (291)
+GT (292)
+ATRIB (293)
+EQ (294)
+NOT_EQ (295)
+
+
+Nonterminals, with rules where they appear
+
+$accept (60)
+    on left: 0
+structured_stmt (61)
+    on left: 1, on right: 0 21 22 23
+compound_stmt (62)
+    on left: 2 3, on right: 1 3
+stmt (63)
+    on left: 4 5 6 7, on right: 2 3
+expr (64)
+    on left: 8 9 10 11 12 13 14 15 16 17 18, on right: 7 8 9 10 11
+    12 13 14 16 17 18 19 24 25 26 27
+assign_stmt (65)
+    on left: 19 20, on right: 4
+if_stmt (66)
+    on left: 21 22, on right: 5
+while_stmt (67)
+    on left: 23, on right: 6
+condition (68)
+    on left: 24 25 26 27, on right: 21 22 23 24 25
+relational_operator (69)
+    on left: 28 29 30, on right: 24 25 26 27
+conditional_operator (70)
+    on left: 31 32, on right: 24 25
+
+
+state 0
+
+    0 $accept: . structured_stmt $end
+
+    '['  shift, and go to state 1
+
+    structured_stmt  go to state 2
+
+
+state 1
+
+    1 structured_stmt: '[' . compound_stmt ']'
+
+    IF          shift, and go to state 3
+    WHILE       shift, and go to state 4
+    IDENTIFIER  shift, and go to state 5
+    '!'         shift, and go to state 6
+    '['         shift, and go to state 7
+    '('         shift, and go to state 8
+    '{'         shift, and go to state 9
+
+    compound_stmt  go to state 10
+    stmt           go to state 11
+    expr           go to state 12
+    assign_stmt    go to state 13
+    if_stmt        go to state 14
+    while_stmt     go to state 15
+
+
+state 2
+
+    0 $accept: structured_stmt . $end
+
+    $end  shift, and go to state 16
+
+
+state 3
+
+   21 if_stmt: IF . condition THEN structured_stmt
+   22        | IF . condition THEN structured_stmt ELSE structured_stmt
+
+    NOT  shift, and go to state 17
+    '!'  shift, and go to state 6
+    '['  shift, and go to state 7
+    '('  shift, and go to state 8
+    '{'  shift, and go to state 9
+
+    expr       go to state 18
+    condition  go to state 19
+
+
+state 4
+
+   23 while_stmt: WHILE . condition DO structured_stmt
+
+    NOT  shift, and go to state 17
+    '!'  shift, and go to state 6
+    '['  shift, and go to state 7
+    '('  shift, and go to state 8
+    '{'  shift, and go to state 9
+
+    expr       go to state 18
+    condition  go to state 20
+
+
+state 5
+
+   19 assign_stmt: IDENTIFIER . ':' expr
+   20            | IDENTIFIER . ':' IDENTIFIER '.'
+
+    ':'  shift, and go to state 21
+
+
+state 6
+
+   15 expr: '!' .
+
+    $default  reduce using rule 15 (expr)
+
+
+state 7
+
+   17 expr: '[' . expr ']'
+
+    '!'  shift, and go to state 6
+    '['  shift, and go to state 7
+    '('  shift, and go to state 8
+    '{'  shift, and go to state 9
+
+    expr  go to state 22
+
+
+state 8
+
+   16 expr: '(' . expr ')'
+
+    '!'  shift, and go to state 6
+    '['  shift, and go to state 7
+    '('  shift, and go to state 8
+    '{'  shift, and go to state 9
+
+    expr  go to state 23
+
+
+state 9
+
+   18 expr: '{' . expr '}'
+
+    '!'  shift, and go to state 6
+    '['  shift, and go to state 7
+    '('  shift, and go to state 8
+    '{'  shift, and go to state 9
+
+    expr  go to state 24
+
+
+state 10
+
+    1 structured_stmt: '[' compound_stmt . ']'
+    3 compound_stmt: compound_stmt . '.' stmt
+
+    ']'  shift, and go to state 25
+    '.'  shift, and go to state 26
+
+
+state 11
+
+    2 compound_stmt: stmt .
+
+    $default  reduce using rule 2 (compound_stmt)
+
+
+state 12
+
+    7 stmt: expr . '.'
+    8 expr: expr . '+' expr
+    9     | expr . '-' expr
+   10     | expr . '*' expr
+   11     | expr . '/' expr
+   12     | expr . '%' expr
+   13     | expr . '&' expr
+   14     | expr . '|' expr
+
+    '+'  shift, and go to state 27
+    '-'  shift, and go to state 28
+    '*'  shift, and go to state 29
+    '/'  shift, and go to state 30
+    '%'  shift, and go to state 31
+    '&'  shift, and go to state 32
+    '|'  shift, and go to state 33
+    '.'  shift, and go to state 34
+
+
+state 13
+
+    4 stmt: assign_stmt .
+
+    $default  reduce using rule 4 (stmt)
+
+
+state 14
+
+    5 stmt: if_stmt .
+
+    $default  reduce using rule 5 (stmt)
+
+
+state 15
+
+    6 stmt: while_stmt .
+
+    $default  reduce using rule 6 (stmt)
+
+
+state 16
+
+    0 $accept: structured_stmt $end .
+
+    $default  accept
+
+
+state 17
+
+   25 condition: NOT . expr relational_operator expr conditional_operator condition
+   27          | NOT . expr relational_operator expr
+
+    '!'  shift, and go to state 6
+    '['  shift, and go to state 7
+    '('  shift, and go to state 8
+    '{'  shift, and go to state 9
+
+    expr  go to state 35
+
+
+state 18
+
+    8 expr: expr . '+' expr
+    9     | expr . '-' expr
+   10     | expr . '*' expr
+   11     | expr . '/' expr
+   12     | expr . '%' expr
+   13     | expr . '&' expr
+   14     | expr . '|' expr
+   24 condition: expr . relational_operator expr conditional_operator condition
+   26          | expr . relational_operator expr
+
+    '+'  shift, and go to state 27
+    '-'  shift, and go to state 28
+    '*'  shift, and go to state 29
+    '/'  shift, and go to state 30
+    '%'  shift, and go to state 31
+    '&'  shift, and go to state 32
+    '|'  shift, and go to state 33
+    '<'  shift, and go to state 36
+    '>'  shift, and go to state 37
+    '='  shift, and go to state 38
+
+    relational_operator  go to state 39
+
+
+state 19
+
+   21 if_stmt: IF condition . THEN structured_stmt
+   22        | IF condition . THEN structured_stmt ELSE structured_stmt
+
+    THEN  shift, and go to state 40
+
+
+state 20
+
+   23 while_stmt: WHILE condition . DO structured_stmt
+
+    DO  shift, and go to state 41
+
+
+state 21
+
+   19 assign_stmt: IDENTIFIER ':' . expr
+   20            | IDENTIFIER ':' . IDENTIFIER '.'
+
+    IDENTIFIER  shift, and go to state 42
+    '!'         shift, and go to state 6
+    '['         shift, and go to state 7
+    '('         shift, and go to state 8
+    '{'         shift, and go to state 9
+
+    expr  go to state 43
+
+
+state 22
+
+    8 expr: expr . '+' expr
+    9     | expr . '-' expr
+   10     | expr . '*' expr
+   11     | expr . '/' expr
+   12     | expr . '%' expr
+   13     | expr . '&' expr
+   14     | expr . '|' expr
+   17     | '[' expr . ']'
+
+    '+'  shift, and go to state 27
+    '-'  shift, and go to state 28
+    '*'  shift, and go to state 29
+    '/'  shift, and go to state 30
+    '%'  shift, and go to state 31
+    '&'  shift, and go to state 32
+    '|'  shift, and go to state 33
+    ']'  shift, and go to state 44
+
+
+state 23
+
+    8 expr: expr . '+' expr
+    9     | expr . '-' expr
+   10     | expr . '*' expr
+   11     | expr . '/' expr
+   12     | expr . '%' expr
+   13     | expr . '&' expr
+   14     | expr . '|' expr
+   16     | '(' expr . ')'
+
+    '+'  shift, and go to state 27
+    '-'  shift, and go to state 28
+    '*'  shift, and go to state 29
+    '/'  shift, and go to state 30
+    '%'  shift, and go to state 31
+    '&'  shift, and go to state 32
+    '|'  shift, and go to state 33
+    ')'  shift, and go to state 45
+
+
+state 24
+
+    8 expr: expr . '+' expr
+    9     | expr . '-' expr
+   10     | expr . '*' expr
+   11     | expr . '/' expr
+   12     | expr . '%' expr
+   13     | expr . '&' expr
+   14     | expr . '|' expr
+   18     | '{' expr . '}'
+
+    '+'  shift, and go to state 27
+    '-'  shift, and go to state 28
+    '*'  shift, and go to state 29
+    '/'  shift, and go to state 30
+    '%'  shift, and go to state 31
+    '&'  shift, and go to state 32
+    '|'  shift, and go to state 33
+    '}'  shift, and go to state 46
+
+
+state 25
+
+    1 structured_stmt: '[' compound_stmt ']' .
+
+    $default  reduce using rule 1 (structured_stmt)
+
+
+state 26
+
+    3 compound_stmt: compound_stmt '.' . stmt
+
+    IF          shift, and go to state 3
+    WHILE       shift, and go to state 4
+    IDENTIFIER  shift, and go to state 5
+    '!'         shift, and go to state 6
+    '['         shift, and go to state 7
+    '('         shift, and go to state 8
+    '{'         shift, and go to state 9
+
+    stmt         go to state 47
+    expr         go to state 12
+    assign_stmt  go to state 13
+    if_stmt      go to state 14
+    while_stmt   go to state 15
+
+
+state 27
+
+    8 expr: expr '+' . expr
+
+    '!'  shift, and go to state 6
+    '['  shift, and go to state 7
+    '('  shift, and go to state 8
+    '{'  shift, and go to state 9
+
+    expr  go to state 48
+
+
+state 28
+
+    9 expr: expr '-' . expr
+
+    '!'  shift, and go to state 6
+    '['  shift, and go to state 7
+    '('  shift, and go to state 8
+    '{'  shift, and go to state 9
+
+    expr  go to state 49
+
+
+state 29
+
+   10 expr: expr '*' . expr
+
+    '!'  shift, and go to state 6
+    '['  shift, and go to state 7
+    '('  shift, and go to state 8
+    '{'  shift, and go to state 9
+
+    expr  go to state 50
+
+
+state 30
+
+   11 expr: expr '/' . expr
+
+    '!'  shift, and go to state 6
+    '['  shift, and go to state 7
+    '('  shift, and go to state 8
+    '{'  shift, and go to state 9
+
+    expr  go to state 51
+
+
+state 31
+
+   12 expr: expr '%' . expr
+
+    '!'  shift, and go to state 6
+    '['  shift, and go to state 7
+    '('  shift, and go to state 8
+    '{'  shift, and go to state 9
+
+    expr  go to state 52
+
+
+state 32
+
+   13 expr: expr '&' . expr
+
+    '!'  shift, and go to state 6
+    '['  shift, and go to state 7
+    '('  shift, and go to state 8
+    '{'  shift, and go to state 9
+
+    expr  go to state 53
+
+
+state 33
+
+   14 expr: expr '|' . expr
+
+    '!'  shift, and go to state 6
+    '['  shift, and go to state 7
+    '('  shift, and go to state 8
+    '{'  shift, and go to state 9
+
+    expr  go to state 54
+
+
+state 34
+
+    7 stmt: expr '.' .
+
+    $default  reduce using rule 7 (stmt)
+
+
+state 35
+
+    8 expr: expr . '+' expr
+    9     | expr . '-' expr
+   10     | expr . '*' expr
+   11     | expr . '/' expr
+   12     | expr . '%' expr
+   13     | expr . '&' expr
+   14     | expr . '|' expr
+   25 condition: NOT expr . relational_operator expr conditional_operator condition
+   27          | NOT expr . relational_operator expr
+
+    '+'  shift, and go to state 27
+    '-'  shift, and go to state 28
+    '*'  shift, and go to state 29
+    '/'  shift, and go to state 30
+    '%'  shift, and go to state 31
+    '&'  shift, and go to state 32
+    '|'  shift, and go to state 33
+    '<'  shift, and go to state 36
+    '>'  shift, and go to state 37
+    '='  shift, and go to state 38
+
+    relational_operator  go to state 55
+
+
+state 36
+
+   28 relational_operator: '<' .
+
+    $default  reduce using rule 28 (relational_operator)
+
+
+state 37
+
+   29 relational_operator: '>' .
+
+    $default  reduce using rule 29 (relational_operator)
+
+
+state 38
+
+   30 relational_operator: '=' .
+
+    $default  reduce using rule 30 (relational_operator)
+
+
+state 39
+
+   24 condition: expr relational_operator . expr conditional_operator condition
+   26          | expr relational_operator . expr
+
+    '!'  shift, and go to state 6
+    '['  shift, and go to state 7
+    '('  shift, and go to state 8
+    '{'  shift, and go to state 9
+
+    expr  go to state 56
+
+
+state 40
+
+   21 if_stmt: IF condition THEN . structured_stmt
+   22        | IF condition THEN . structured_stmt ELSE structured_stmt
+
+    '['  shift, and go to state 1
+
+    structured_stmt  go to state 57
+
+
+state 41
+
+   23 while_stmt: WHILE condition DO . structured_stmt
+
+    '['  shift, and go to state 1
+
+    structured_stmt  go to state 58
+
+
+state 42
+
+   20 assign_stmt: IDENTIFIER ':' IDENTIFIER . '.'
+
+    '.'  shift, and go to state 59
+
+
+state 43
+
+    8 expr: expr . '+' expr
+    9     | expr . '-' expr
+   10     | expr . '*' expr
+   11     | expr . '/' expr
+   12     | expr . '%' expr
+   13     | expr . '&' expr
+   14     | expr . '|' expr
+   19 assign_stmt: IDENTIFIER ':' expr .
+
+    '+'  shift, and go to state 27
+    '-'  shift, and go to state 28
+    '*'  shift, and go to state 29
+    '/'  shift, and go to state 30
+    '%'  shift, and go to state 31
+    '&'  shift, and go to state 32
+    '|'  shift, and go to state 33
+
+    $default  reduce using rule 19 (assign_stmt)
+
+
+state 44
+
+   17 expr: '[' expr ']' .
+
+    $default  reduce using rule 17 (expr)
+
+
+state 45
+
+   16 expr: '(' expr ')' .
+
+    $default  reduce using rule 16 (expr)
+
+
+state 46
+
+   18 expr: '{' expr '}' .
+
+    $default  reduce using rule 18 (expr)
+
+
+state 47
+
+    3 compound_stmt: compound_stmt '.' stmt .
+
+    $default  reduce using rule 3 (compound_stmt)
+
+
+state 48
+
+    8 expr: expr . '+' expr
+    8     | expr '+' expr .
+    9     | expr . '-' expr
+   10     | expr . '*' expr
+   11     | expr . '/' expr
+   12     | expr . '%' expr
+   13     | expr . '&' expr
+   14     | expr . '|' expr
+
+    '&'  shift, and go to state 32
+    '|'  shift, and go to state 33
+
+    $default  reduce using rule 8 (expr)
+
+
+state 49
+
+    8 expr: expr . '+' expr
+    9     | expr . '-' expr
+    9     | expr '-' expr .
+   10     | expr . '*' expr
+   11     | expr . '/' expr
+   12     | expr . '%' expr
+   13     | expr . '&' expr
+   14     | expr . '|' expr
+
+    '&'  shift, and go to state 32
+    '|'  shift, and go to state 33
+
+    $default  reduce using rule 9 (expr)
+
+
+state 50
+
+    8 expr: expr . '+' expr
+    9     | expr . '-' expr
+   10     | expr . '*' expr
+   10     | expr '*' expr .
+   11     | expr . '/' expr
+   12     | expr . '%' expr
+   13     | expr . '&' expr
+   14     | expr . '|' expr
+
+    '&'  shift, and go to state 32
+    '|'  shift, and go to state 33
+
+    $default  reduce using rule 10 (expr)
+
+
+state 51
+
+    8 expr: expr . '+' expr
+    9     | expr . '-' expr
+   10     | expr . '*' expr
+   11     | expr . '/' expr
+   11     | expr '/' expr .
+   12     | expr . '%' expr
+   13     | expr . '&' expr
+   14     | expr . '|' expr
+
+    '&'  shift, and go to state 32
+    '|'  shift, and go to state 33
+
+    $default  reduce using rule 11 (expr)
+
+
+state 52
+
+    8 expr: expr . '+' expr
+    9     | expr . '-' expr
+   10     | expr . '*' expr
+   11     | expr . '/' expr
+   12     | expr . '%' expr
+   12     | expr '%' expr .
+   13     | expr . '&' expr
+   14     | expr . '|' expr
+
+    '&'  shift, and go to state 32
+    '|'  shift, and go to state 33
+
+    $default  reduce using rule 12 (expr)
+
+
+state 53
+
+    8 expr: expr . '+' expr
+    9     | expr . '-' expr
+   10     | expr . '*' expr
+   11     | expr . '/' expr
+   12     | expr . '%' expr
+   13     | expr . '&' expr
+   13     | expr '&' expr .
+   14     | expr . '|' expr
+
+    $default  reduce using rule 13 (expr)
+
+
+state 54
+
+    8 expr: expr . '+' expr
+    9     | expr . '-' expr
+   10     | expr . '*' expr
+   11     | expr . '/' expr
+   12     | expr . '%' expr
+   13     | expr . '&' expr
+   14     | expr . '|' expr
+   14     | expr '|' expr .
+
+    $default  reduce using rule 14 (expr)
+
+
+state 55
+
+   25 condition: NOT expr relational_operator . expr conditional_operator condition
+   27          | NOT expr relational_operator . expr
+
+    '!'  shift, and go to state 6
+    '['  shift, and go to state 7
+    '('  shift, and go to state 8
+    '{'  shift, and go to state 9
+
+    expr  go to state 60
+
+
+state 56
+
+    8 expr: expr . '+' expr
+    9     | expr . '-' expr
+   10     | expr . '*' expr
+   11     | expr . '/' expr
+   12     | expr . '%' expr
+   13     | expr . '&' expr
+   14     | expr . '|' expr
+   24 condition: expr relational_operator expr . conditional_operator condition
+   26          | expr relational_operator expr .
+
+    '+'  shift, and go to state 27
+    '-'  shift, and go to state 28
+    '*'  shift, and go to state 29
+    '/'  shift, and go to state 30
+    '%'  shift, and go to state 31
+    '&'  shift, and go to state 61
+    '|'  shift, and go to state 62
+
+    $default  reduce using rule 26 (condition)
+
+    conditional_operator  go to state 63
+
+
+state 57
+
+   21 if_stmt: IF condition THEN structured_stmt .
+   22        | IF condition THEN structured_stmt . ELSE structured_stmt
+
+    ELSE  shift, and go to state 64
+
+    $default  reduce using rule 21 (if_stmt)
+
+
+state 58
+
+   23 while_stmt: WHILE condition DO structured_stmt .
+
+    $default  reduce using rule 23 (while_stmt)
+
+
+state 59
+
+   20 assign_stmt: IDENTIFIER ':' IDENTIFIER '.' .
+
+    $default  reduce using rule 20 (assign_stmt)
+
+
+state 60
+
+    8 expr: expr . '+' expr
+    9     | expr . '-' expr
+   10     | expr . '*' expr
+   11     | expr . '/' expr
+   12     | expr . '%' expr
+   13     | expr . '&' expr
+   14     | expr . '|' expr
+   25 condition: NOT expr relational_operator expr . conditional_operator condition
+   27          | NOT expr relational_operator expr .
+
+    '+'  shift, and go to state 27
+    '-'  shift, and go to state 28
+    '*'  shift, and go to state 29
+    '/'  shift, and go to state 30
+    '%'  shift, and go to state 31
+    '&'  shift, and go to state 61
+    '|'  shift, and go to state 62
+
+    $default  reduce using rule 27 (condition)
+
+    conditional_operator  go to state 65
+
+
+state 61
+
+   13 expr: expr '&' . expr
+   31 conditional_operator: '&' .
+
+    '['  shift, and go to state 7
+    '('  shift, and go to state 8
+    '{'  shift, and go to state 9
+
+    '['       [reduce using rule 31 (conditional_operator)]
+    '('       [reduce using rule 31 (conditional_operator)]
+    '{'       [reduce using rule 31 (conditional_operator)]
+    $default  reduce using rule 31 (conditional_operator)
+
+    expr  go to state 53
+
+
+state 62
+
+   14 expr: expr '|' . expr
+   32 conditional_operator: '|' .
+
+    '['  shift, and go to state 7
+    '('  shift, and go to state 8
+    '{'  shift, and go to state 9
+
+    '['       [reduce using rule 32 (conditional_operator)]
+    '('       [reduce using rule 32 (conditional_operator)]
+    '{'       [reduce using rule 32 (conditional_operator)]
+    $default  reduce using rule 32 (conditional_operator)
+
+    expr  go to state 54
+
+
+state 63
+
+   24 condition: expr relational_operator expr conditional_operator . condition
+
+    NOT  shift, and go to state 17
+    '!'  shift, and go to state 6
+    '['  shift, and go to state 7
+    '('  shift, and go to state 8
+    '{'  shift, and go to state 9
+
+    expr       go to state 18
+    condition  go to state 66
+
+
+state 64
+
+   22 if_stmt: IF condition THEN structured_stmt ELSE . structured_stmt
+
+    '['  shift, and go to state 1
+
+    structured_stmt  go to state 67
+
+
+state 65
+
+   25 condition: NOT expr relational_operator expr conditional_operator . condition
+
+    NOT  shift, and go to state 17
+    '!'  shift, and go to state 6
+    '['  shift, and go to state 7
+    '('  shift, and go to state 8
+    '{'  shift, and go to state 9
+
+    expr       go to state 18
+    condition  go to state 68
+
+
+state 66
+
+   24 condition: expr relational_operator expr conditional_operator condition .
+
+    $default  reduce using rule 24 (condition)
+
+
+state 67
+
+   22 if_stmt: IF condition THEN structured_stmt ELSE structured_stmt .
+
+    $default  reduce using rule 22 (if_stmt)
+
+
+state 68
+
+   25 condition: NOT expr relational_operator expr conditional_operator condition .
+
+    $default  reduce using rule 25 (condition)
